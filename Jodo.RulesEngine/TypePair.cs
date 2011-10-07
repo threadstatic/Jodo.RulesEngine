@@ -7,6 +7,7 @@ namespace Jodo
 	/// into one conceptual pair. Provides a GetHashCode implementation
 	/// utilizing the combined objects.
 	/// </summary>
+    /// <remarks>Implementation taken from Jimmy Bogard's AutoMapper</remarks>
 	public struct TypePair : IEquatable<TypePair>
 	{
 		private readonly Type type1;

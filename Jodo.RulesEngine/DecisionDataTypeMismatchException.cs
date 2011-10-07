@@ -13,9 +13,9 @@ namespace Jodo
 	/// </summary>
 	[Serializable]
 	[ComVisible(true)]
-	public class DecisionDataTypeException : RulesInitializationException
+	public class DecisionDataTypeMismatchException : RulesInitializationException
 	{
-		public DecisionDataTypeException(string message) : base(message)
+		public DecisionDataTypeMismatchException(string message) : base(message)
 		{
 		}
 	}

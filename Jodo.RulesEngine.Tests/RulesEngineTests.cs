@@ -26,7 +26,7 @@ namespace Jodo.Tests
         }
 
 		[Test]
-        public void RegisterRule_GetRuleFor_ReturnsOneRuleThatIsTheRegisteredRule()
+        public void GetRuleFor_ReturnsOneRuleThatIsTheRegisteredRule()
 		{
             var rules = RulesProvider.GetRulesFor<IAccountBalanceRules, decimal>(typeof(Account));
             Assert.AreEqual(typeof(MeetsTheMinimumRequiredAccountBalance), rules.ToList().Single().Invoke().GetType());
@@ -44,7 +44,7 @@ namespace Jodo.Tests
         }
 
         [Test]
-        public void RegisterRules_GetRulesFor_ReturnsAllRegisteredRules()
+        public void GetRulesFor_ReturnsAllRegisteredRules()
         {
             MockRule rule = new MockRule();
             RulesInitializer.RegisterRule<IAccountBalanceRules, decimal>(typeof(Account), () => rule);
@@ -71,21 +71,21 @@ namespace Jodo.Tests
         }
 
         [Test]
-        public void RegisterRule_WithRuleContextClassInsteadOfAInterface_ThrowsRulesInitializationException()
+        public void RegisterRule_WithRuleContextClassInsteadOfAInterface_ThrowsException()
         {
             Action action = () => RulesInitializer.RegisterRule<RuleContextObjectAsAClassInsteadOfAInterface, decimal>(typeof(Account), () => new MockRule());
             Assert.Throws<RulesInitializationException>(new TestDelegate(action));
         }
 
         [Test]
-        public void RegisterRule_WithARuleContextDecisionDataTypeAndRuleDecisionDataTypeMismatch_ThrowsDecisionDataTypeException()
+        public void RegisterRule_WithARuleContextDecisionDataTypeAndRuleDecisionDataTypeMismatch_ThrowsException()
         {
             Action action = () => RulesInitializer.RegisterRule<IRuleContextWithDecimalDecisionData, decimal>(typeof(Account), () => new MockRuleWithStringDecisionData());
-            Assert.Throws<DecisionDataTypeException>(new TestDelegate(action));
+            Assert.Throws<DecisionDataTypeMismatchException>(new TestDelegate(action));
         }
 
         [Test]
-        public void GetRulesFor_ForASubTypeOfATypeThatHasRules_BaseTypeRulesAreReturnedAsWell()
+        public void GetRulesFor_ASubType_OfATypeThatHasRulesRegistered_SubTypeAndBaseTypeRulesAreReturned()
         {
             MeetsTheMinimumRequiredAccountBalance rule = new MeetsTheMinimumRequiredAccountBalance(100);
             RulesInitializer.RegisterRule<IAccountBalanceRules, decimal>(typeof(AccountSubType), () => rule);
@@ -105,7 +105,7 @@ namespace Jodo.Tests
         }
 
         [Test]
-        public void GetRulesFor_ForAInterfaceThatHasOneRuleRegistered_RuleIsReturned()
+        public void GetRulesFor_AInterfaceThatHasOneRuleRegistered_RuleIsReturned()
         {
             MeetsTheMinimumRequiredAccountBalance rule = new MeetsTheMinimumRequiredAccountBalance(100);
             RulesInitializer.RegisterRule<IAccountBalanceRules, decimal>(typeof(IAccount), () => rule);

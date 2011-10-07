@@ -27,10 +27,11 @@ namespace Jodo
             }
         }
 
-        private static readonly IRulesInitializer RulesInitializer = new RulesEngine();
+        private static IRulesInitializer RulesInitializer;
       
         static void Main(string[] args)
         {
+            RulesInitializer = Container.GetExportedValue<IRulesInitializer>();
             RegisterRules();
             Run();
             Console.ReadKey();

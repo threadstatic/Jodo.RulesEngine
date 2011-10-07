@@ -7,6 +7,7 @@ using Jodo.Rules;
 namespace Jodo
 {
     [Export(typeof(IRulesRunner))]
+    [Export(typeof(IRulesInitializer))]
 	public sealed class RulesEngine : IRulesInitializer, IRulesProvider, IRulesRunner, IDisposable
 	{
 		private static readonly Dictionary<RuleKey, IEnumerable<object>> RulesStore = new Dictionary<RuleKey, IEnumerable<object>>();
@@ -284,7 +285,7 @@ namespace Jodo
 		/// <typeparam name="TRuleContext"></typeparam>
 		/// <typeparam name="TCandidate"></typeparam>
 		/// <param name="rules"></param>
-		/// <exception cref="DecisionDataTypeException">
+		/// <exception cref="DecisionDataTypeMismatchException">
         /// Throw if the  the TDecisionData type supplied on the TRuleContext
         /// does not match the TDecisionData type supplied 
         /// in the <see cref="Jodo.Rules.IRule{TCandidate}"/> interface.
@@ -332,7 +333,7 @@ namespace Jodo
 							Type[] specificationWithTypeGenArgs = specsInterface.GetInterfaces();
 
 							if ((specificationWithTypeGenArgs[0] == typeof(IRule<>).MakeGenericType(new[] {typeof(TCandidate)})) && genArgs[1] != decisionDataType)
-                                throw new DecisionDataTypeException(String.Format("The decision data type parameter declared on specifcation {0}, does not match the decision data type parameter declared on the specification context interface {1}.", spec, typeof(TRuleContext)));
+                                throw new DecisionDataTypeMismatchException(String.Format("The decision data type parameter declared on specifcation {0}, does not match the decision data type parameter declared on the specification context interface {1}.", spec, typeof(TRuleContext)));
 						}
 					}
 				}
@@ -341,9 +342,13 @@ namespace Jodo
 
 		#endregion
 
+        #region IDisposable Implementation
+
         public void Dispose()
         {
             RulesStore.Clear();
         }
+
+        #endregion
     }
 }

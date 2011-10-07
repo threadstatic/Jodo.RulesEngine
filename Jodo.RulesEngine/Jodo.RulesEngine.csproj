@@ -39,7 +39,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DecisionDataTypeException.cs" />
+    <Compile Include="DecisionDataTypeMismatchException.cs" />
     <Compile Include="IRulesInitializer.cs" />
     <Compile Include="IRulesProvider.cs" />
     <Compile Include="Rules\NullRule.cs" />

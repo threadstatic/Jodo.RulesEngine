@@ -25,6 +25,6 @@ You can then inject the IRulesRunner into a class where you want to consume the 
 		
 		
 The IRulesRunner executes all IRules registered for the context in which you are asking for rules(IAccountBalanceWithdrawlRules), 
-and for the object in which you registed rules for(typeof(Account)), and returns void if all rules executed successfully(returned true),
+and for the object in which you registed rules for(typeof(Account)), and returns void if all rules executed successfully,
 or throws a InvalidOperationException if any rules failed.
  
