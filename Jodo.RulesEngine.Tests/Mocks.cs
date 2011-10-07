@@ -3,7 +3,14 @@ using Jodo.Rules;
 
 namespace Jodo.Tests
 {
-    public class Account
+    public interface IAccount { }
+
+    public class Account : IAccount
+    {
+
+    }
+
+    public class AccountSubType : Account
     {
 
     }

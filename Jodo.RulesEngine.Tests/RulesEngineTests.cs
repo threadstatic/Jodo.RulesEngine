@@ -7,7 +7,7 @@ namespace Jodo.Tests
 {
 	public class RulesEngineTests
 	{
-        private static RulesEngine rulesEngine = new RulesEngine();
+        private RulesEngine rulesEngine = new RulesEngine();
         private IRulesInitializer RulesInitializer { get { return rulesEngine; } }
         private IRulesProvider RulesProvider { get { return rulesEngine; } }
 
@@ -21,16 +21,14 @@ namespace Jodo.Tests
 		[Test]
         public void RegisterRule_GetRuleFor_ReturnsOneRuleThatIsTheRegisteredRule()
 		{
-            MeetsTheMinimumRequiredAccountBalance rule = new MeetsTheMinimumRequiredAccountBalance(100);
-            RulesInitializer.RegisterRule<IAccountBalanceRules, decimal>(typeof(Account), () => rule);
-
             var rules = RulesProvider.GetRulesFor<IAccountBalanceRules, decimal>(typeof(Account));
-            Assert.AreEqual(typeof(MeetsTheMinimumRequiredAccountBalance), rules.ToList().Single().Invoke().GetType());
+            Assert.AreEqual(typeof(MeetsTheMinimumRequiredAccountBalance), rules.ToList().First().Invoke().GetType());
 		}
 
         [Test]
         public void RegisterRule_WhenRuleHasAlreadyBeenRegisted_WillRegisterTheRuleAgain()
         {
+            new RulesEngine();
             MeetsTheMinimumRequiredAccountBalance rule = new MeetsTheMinimumRequiredAccountBalance(100);
             RulesInitializer.RegisterRule<IAccountBalanceRules, decimal>(typeof(Account), () => rule);
             var rules = RulesProvider.GetRulesFor<IAccountBalanceRules, decimal>(typeof(Account));
@@ -78,6 +76,36 @@ namespace Jodo.Tests
         {
             Action action = () => RulesInitializer.RegisterRule<IRuleContextWithDecimalDecisionData, decimal>(typeof(Account), () => new MockRuleWithStringDecisionData());
             Assert.Throws<DecisionDataTypeException>(new TestDelegate(action));
+        }
+
+        [Test]
+        public void GetRulesFor_ForASubTypeOfATypeThatHasRules_BaseTypeRulesAreReturnedAsWell()
+        {
+            MeetsTheMinimumRequiredAccountBalance rule = new MeetsTheMinimumRequiredAccountBalance(100);
+            RulesInitializer.RegisterRule<IAccountBalanceRules, decimal>(typeof(AccountSubType), () => rule);
+
+            var rules = RulesProvider.GetRulesFor<IAccountBalanceRules, decimal>(typeof(AccountSubType));
+            Assert.AreEqual(2, rules.ToList().Count);
+        }
+
+        [Test]
+        public void GetRulesFor_ForASubTypeOfATypeThatHasRules_OnlyBaseTypeRulesAreReturned()
+        {
+            MeetsTheMinimumRequiredAccountBalance rule = new MeetsTheMinimumRequiredAccountBalance(100);
+            RulesInitializer.RegisterRule<IAccountBalanceRules, decimal>(typeof(AccountSubType), () => rule);
+
+            var rules = RulesProvider.GetRulesFor<IAccountBalanceRules, decimal>(typeof(Account));
+            Assert.AreEqual(1, rules.ToList().Count);
+        }
+
+        [Test]
+        public void GetRulesFor_ForAInterfaceThatHasOneRuleRegistered_RuleIsReturned()
+        {
+            MeetsTheMinimumRequiredAccountBalance rule = new MeetsTheMinimumRequiredAccountBalance(100);
+            RulesInitializer.RegisterRule<IAccountBalanceRules, decimal>(typeof(IAccount), () => rule);
+
+            var rules = RulesProvider.GetRulesFor<IAccountBalanceRules, decimal>(typeof(IAccount));
+            Assert.AreEqual(1, rules.ToList().Count);
         }
 	}
 }
