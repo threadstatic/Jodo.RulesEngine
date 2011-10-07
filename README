@@ -18,7 +18,7 @@ You can then inject the IRulesRunner into a class where you want to consume the 
 
 		public void WithDrawl(decimal amount)
         {
-            rulesRunner.TestRules<IAccountBalanceWithdrawlRules, decimal, Account>(GetType(), Balance, this);          
+            rulesRunner.TestRules<IAccountBalanceWithdrawlRules, decimal, Account>(GetType(), amount, this);          
             Balance -= amount;
         }
 		
