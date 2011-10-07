@@ -1,30 +1,30 @@
 .Net Rules Engine written in C# and based on the Specification Pattern.
 
-Goal of this project was to create a simple and powerful, and minimally intrusive way to plug business rules into your code.
+Goal of this project was to create a simple, powerful, and minimally intrusive way to plug business rules into your code.
 The rules engine is basically a specialized container that provides a way to register IRule's and to locate them.
   
 In a high level configuration module, you would register the rules: 
 
   RulesInitializer.RegisterRule<IAccountBalanceWithdrawlRules, decimal>(typeof(Account), () => new MinimumAccountBalanceToAllowWithdrawl(100));
-  Here we are registering a MinimumAccountBalanceToAllowWithdrawl rule scoped to a particuliar context, IAccountBalanceWithdrawlRules, and with a specification candidate type of Deciaml,
+  
+  Here we are registering a MinimumAccountBalanceToAllowWithdrawl(which implements the IRule interface) rule scoped to a particuliar context, IAccountBalanceWithdrawlRules, and with a specification candidate type of Deciaml,
   and for the object type Account.
   
 You can then inject the IRulesRunner into a class where you want to consume the rules:
-		public Account(int id, IRulesRunner rulesRunner)
+	public Account(int id, IRulesRunner rulesRunner)
         {
             Id = id;
             this.rulesRunner = rulesRunner;           
         }
 
-		public void WithDrawl(decimal amount)
+	public void WithDrawl(decimal amount)
         {
             rulesRunner.TestRules<IAccountBalanceWithdrawlRules, decimal, Account>(GetType(), amount, this);          
             Balance -= amount;
         }
 		
 		
-A IRule is implemented by a class such as MinimumAccountBalanceToAllowWithdrawl.
 The IRulesRunner executes all IRules registered for the context in which you are asking for rules(IAccountBalanceWithdrawlRules), 
-and the object in which you registed rules for(typeof(Account)), and returns void if all rules executed successfully(returned true),
+and for the object in which you registed rules for(typeof(Account)), and returns void if all rules executed successfully(returned true),
 or throws a InvalidOperationException if any rules failed.
  

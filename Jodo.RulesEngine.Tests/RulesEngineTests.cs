@@ -22,13 +22,12 @@ namespace Jodo.Tests
         public void RegisterRule_GetRuleFor_ReturnsOneRuleThatIsTheRegisteredRule()
 		{
             var rules = RulesProvider.GetRulesFor<IAccountBalanceRules, decimal>(typeof(Account));
-            Assert.AreEqual(typeof(MeetsTheMinimumRequiredAccountBalance), rules.ToList().First().Invoke().GetType());
+            Assert.AreEqual(typeof(MeetsTheMinimumRequiredAccountBalance), rules.ToList().Single().Invoke().GetType());
 		}
 
         [Test]
         public void RegisterRule_WhenRuleHasAlreadyBeenRegisted_WillRegisterTheRuleAgain()
         {
-            new RulesEngine();
             MeetsTheMinimumRequiredAccountBalance rule = new MeetsTheMinimumRequiredAccountBalance(100);
             RulesInitializer.RegisterRule<IAccountBalanceRules, decimal>(typeof(Account), () => rule);
             var rules = RulesProvider.GetRulesFor<IAccountBalanceRules, decimal>(typeof(Account));
