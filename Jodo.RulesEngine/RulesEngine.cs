@@ -7,7 +7,7 @@ using Jodo.Rules;
 namespace Jodo
 {
     [Export(typeof(IRulesRunner))]
-	public sealed class RulesEngine : IRulesInitializer, IRulesProvider, IRulesRunner
+	public sealed class RulesEngine : IRulesInitializer, IRulesProvider, IRulesRunner, IDisposable
 	{
 		private static readonly Dictionary<RuleKey, IEnumerable<object>> RulesStore = new Dictionary<RuleKey, IEnumerable<object>>();
 
@@ -340,5 +340,10 @@ namespace Jodo
 		}
 
 		#endregion
+
+        public void Dispose()
+        {
+            RulesStore.Clear();
+        }
     }
 }

@@ -7,15 +7,22 @@ namespace Jodo.Tests
 {
 	public class RulesEngineTests
 	{
-        private RulesEngine rulesEngine = new RulesEngine();
+        private RulesEngine rulesEngine;
         private IRulesInitializer RulesInitializer { get { return rulesEngine; } }
         private IRulesProvider RulesProvider { get { return rulesEngine; } }
 
         [SetUp]
         public void Setup()
         {
+            rulesEngine = new RulesEngine();
             MeetsTheMinimumRequiredAccountBalance rule = new MeetsTheMinimumRequiredAccountBalance(100);
             RulesInitializer.RegisterRule<IAccountBalanceRules, decimal>(typeof(Account), () => rule);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            rulesEngine.Dispose();
         }
 
 		[Test]
