@@ -27,11 +27,8 @@ namespace Jodo
             }
         }
 
-        private static IRulesInitializer RulesInitializer;
-      
         static void Main(string[] args)
         {
-            RulesInitializer = Container.GetExportedValue<IRulesInitializer>();
             RegisterRules();
             Run();
             Console.ReadKey();
@@ -39,8 +36,9 @@ namespace Jodo
 
         private static void RegisterRules()
         {
-            RulesInitializer.RegisterRule<IAccountBalanceWithdrawlRules, decimal>(typeof(Account), () => new MinimumAccountBalanceToAllowWithdrawl(100));
-            RulesInitializer.RegisterRule<IAccountStatusWithdrawRules, Account>(typeof(Account), () => new AccountStatusRequirementToAllowWithDrawl());
+            IRulesInitializer rulesInitializer = Container.GetExportedValue<IRulesInitializer>();
+            rulesInitializer.RegisterRule<IAccountBalanceWithdrawlRules, decimal>(typeof(Account), () => new MinimumAccountBalanceToAllowWithdrawl(100));
+            rulesInitializer.RegisterRule<IAccountStatusWithdrawRules, Account>(typeof(Account), () => new AccountStatusRequirementToAllowWithDrawl());
         }
 
         private static void Run()
