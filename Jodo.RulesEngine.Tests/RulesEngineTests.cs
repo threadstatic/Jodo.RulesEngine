@@ -46,13 +46,13 @@ namespace Jodo.Tests
         [Test]
         public void GetRulesFor_ReturnsAllRegisteredRules()
         {
-            MockRule rule = new MockRule();
+            RuleThatWillAlwaysPass rule = new RuleThatWillAlwaysPass();
             RulesInitializer.RegisterRule<IAccountBalanceRules, decimal>(typeof(Account), () => rule);
 
             var rules = RulesProvider.GetRulesFor<IAccountBalanceRules, decimal>(typeof(Account));
 
             Assert.AreEqual(typeof(MeetsTheMinimumRequiredAccountBalance), rules.ToList()[0].Invoke().GetType());
-            Assert.AreEqual(typeof(MockRule), rules.ToList()[1].Invoke().GetType());
+            Assert.AreEqual(typeof(RuleThatWillAlwaysPass), rules.ToList()[1].Invoke().GetType());
         }
 
 		[Test]
@@ -73,14 +73,14 @@ namespace Jodo.Tests
         [Test]
         public void RegisterRule_WithRuleContextClassInsteadOfAInterface_ThrowsException()
         {
-            Action action = () => RulesInitializer.RegisterRule<RuleContextObjectAsAClassInsteadOfAInterface, decimal>(typeof(Account), () => new MockRule());
+            Action action = () => RulesInitializer.RegisterRule<RuleContextObjectAsAClassInsteadOfAInterface, decimal>(typeof(Account), () => new RuleThatWillAlwaysPass());
             Assert.Throws<RulesInitializationException>(new TestDelegate(action));
         }
 
         [Test]
         public void RegisterRule_WithARuleContextDecisionDataTypeAndRuleDecisionDataTypeMismatch_ThrowsException()
         {
-            Action action = () => RulesInitializer.RegisterRule<IRuleContextWithDecimalDecisionData, decimal>(typeof(Account), () => new MockRuleWithStringDecisionData());
+            Action action = () => RulesInitializer.RegisterRule<IRuleContextWithDecimalDecisionData, decimal>(typeof(Account), () => new RuleWithDecisionDataThatIsAString());
             Assert.Throws<DecisionDataTypeMismatchException>(new TestDelegate(action));
         }
 

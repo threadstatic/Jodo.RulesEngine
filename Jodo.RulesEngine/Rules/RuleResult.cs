@@ -4,27 +4,24 @@ using System.Text;
 
 namespace Jodo.Rules
 {
-	public struct RuleResult
+	public class RuleResult
 	{
 		public bool IsSatisfied { get; private set; }
 		public string[] Messages { get; private set; }
 
 		public RuleResult(bool isSatisfied)
-			: this()
 		{
 			IsSatisfied = isSatisfied;
 			Messages = new [] { string.Empty };
 		}
 
 		public RuleResult(bool isSatisfied, string message)
-			: this()
 		{
 			IsSatisfied = isSatisfied;
 			Messages = new [] { message };
 		}
 
 		public RuleResult(bool isSatisfied, string[] messages)
-			: this()
 		{
 			IsSatisfied = isSatisfied;
 			Messages = messages;

@@ -4,6 +4,11 @@ namespace Jodo.Rules
 {
     public static class RulesRunnerExtensions
     {
+        /// <summary>
+        /// Executes all rules for a Type.
+        /// Returns void if all rules pass; 
+        /// throws a <see cref="InvalidOperationException"/> if any rule fails.
+        /// </summary>
         public static void TestRules<TRuleContext, TCandidate>(this IRulesRunner rulesRunner, IRulesProvider rulesProvider, Type typeToGetRulesFor, TCandidate candidate)
          where TRuleContext : IRule<TCandidate>
         {
@@ -11,6 +16,11 @@ namespace Jodo.Rules
             RunRule(rule, candidate);
         }
 
+        /// <summary>
+        /// Executes all rules for a Type.
+        /// Returns void if all rules pass; 
+        /// throws a <see cref="InvalidOperationException"/> if any rule fails.
+        /// </summary>
         public static void TestRules<TRuleContext, TCandidate, TDecisionData>(this IRulesRunner rulesRunner, IRulesProvider rulesProvider, Type typeToGetRulesFor, TCandidate candidate, TDecisionData decisionData)
             where TRuleContext : IRule<TCandidate, TDecisionData>
         {

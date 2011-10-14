@@ -37,8 +37,11 @@ namespace Jodo
         private static void RegisterRules()
         {
             IRulesInitializer rulesInitializer = Container.GetExportedValue<IRulesInitializer>();
-            rulesInitializer.RegisterRule<IAccountBalanceWithdrawlRules, decimal>(typeof(Account), () => new MinimumAccountBalanceToAllowWithdrawl(100));
-            rulesInitializer.RegisterRule<IAccountStatusWithdrawRules, Account>(typeof(Account), () => new AccountStatusRequirementToAllowWithDrawl());
+
+            rulesInitializer
+                .RegisterRule<IAccountBalanceWithdrawlRules, decimal>(typeof(Account), () => new MinimumAccountBalanceToAllowWithdrawl(100))
+                .RegisterRule<IAccountStatusWithdrawRules, Account>(typeof(Account), () => new AccountStatusRequirementToAllowWithDrawl())
+                ;
         }
 
         private static void Run()

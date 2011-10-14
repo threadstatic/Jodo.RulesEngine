@@ -49,6 +49,7 @@
     <Compile Include="Mocks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RulesEngineTests.cs" />
+    <Compile Include="RulesRunnerExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Jodo.RulesEngine\Jodo.RulesEngine.csproj">
