@@ -13,17 +13,14 @@ namespace Jodo
         {
             get
             {
-                return container ??
+                return container ?? (container = container = new CompositionContainer
                 (
-                    container = container = new CompositionContainer
+                    new AggregateCatalog
                     (
-                        new AggregateCatalog
-                        (
-                            new AssemblyCatalog(Assembly.GetExecutingAssembly()),
-                            new AssemblyCatalog(typeof(RulesEngine).Assembly)
-                        )
+                        new AssemblyCatalog(Assembly.GetExecutingAssembly()),
+                        new AssemblyCatalog(typeof(RulesEngine).Assembly)
                     )
-                );
+                ));
             }
         }
 
@@ -39,7 +36,8 @@ namespace Jodo
             IRulesInitializer rulesInitializer = Container.GetExportedValue<IRulesInitializer>();
 
             rulesInitializer
-                .RegisterRule<IAccountBalanceWithdrawlRules, decimal>(typeof(Account), () => new MinimumAccountBalanceToAllowWithdrawl(100))
+                .RegisterRule<IAccountBalanceWithdrawlRules, decimal>(typeof(Account), () => new MinimumAccountBalanceToAllowWithdrawl(100).And(new RuleThatWillAlwaysPass()))
+                .RegisterRule<IAccountBalanceWithdrawlRules, decimal>(typeof(Account), () => new RuleThatWillAlwaysPass())
                 .RegisterRule<IAccountStatusWithdrawRules, Account>(typeof(Account), () => new AccountStatusRequirementToAllowWithDrawl())
                 ;
         }

@@ -1,61 +1,53 @@
 ﻿using System;
-using System.Collections.Generic;
 using Jodo.Rules.Operators;
 
 namespace Jodo.Rules
 {
 	public static class RuleExtensions
 	{
-		public static IRule<TEntity> And<TEntity>(this IRule<TEntity> rule1, IRule<TEntity> rule2)
+        public static IRule<TCandidate> And<TCandidate>(this IRule<TCandidate> rule1, IRule<TCandidate> rule2)
 		{
-			return new AndRule<TEntity>(rule1, rule2);
+            return new AndRule<TCandidate>(rule1, rule2);
 		}
 
-		public static IRule<TEntity> Or<TEntity>(this IRule<TEntity> rule1, IRule<TEntity> rule2)
+        public static IRule<TCandidate, TDecisionData> And<TCandidate, TDecisionData>(this IRule<TCandidate, TDecisionData> rule1, IRule<TCandidate> rule2)
+        {
+            return new AndRule<TCandidate, TDecisionData>(rule1, rule2.ConvertToRuleWithDecisionData<TCandidate, TDecisionData>());
+        }
+
+        public static IRule<TCandidate, TDecisionData> And<TCandidate, TDecisionData>(this IRule<TCandidate, TDecisionData> rule1, IRule<TCandidate, TDecisionData> rule2)
+        {
+            return new AndRule<TCandidate, TDecisionData>(rule1, rule2);
+        }
+
+        public static IRule<TCandidate> Or<TCandidate>(this IRule<TCandidate> rule1, IRule<TCandidate> rule2)
 		{
-			return new OrRule<TEntity>(rule1, rule2);
+            return new OrRule<TCandidate>(rule1, rule2);
 		}
 
-		public static IRule<TEntity> Not<TEntity>(this IRule<TEntity> rule)
+        public static IRule<TCandidate> Not<TCandidate>(this IRule<TCandidate> rule)
 		{
-			return new NotRule<TEntity>(rule);
+            return new NotRule<TCandidate>(rule);
 		}
 
-		public static RuleResult ExecuteRules<TRule, TCandidate>(this IEnumerable<Func<TRule>> rulesCollection, TCandidate candidate)
-			where TRule : IRule<TCandidate>
+        private static RuleWithDecisionData<TCandidate, TDecisionData> ConvertToRuleWithDecisionData<TCandidate, TDecisionData>(this IRule<TCandidate> rule)
 		{
-			if (rulesCollection != null)
-			{
-				foreach (Func<TRule> specification in rulesCollection)
-				{
-					RuleResult ruleResult = specification().IsSatisfiedBy(candidate);
-
-					if (!ruleResult)
-						return ruleResult;
-				}
-			}
-
-			return new RuleResult(true);
+            return new RuleWithDecisionData<TCandidate, TDecisionData>(rule);
 		}
 
-		public static RuleResult ExecuteRules<TRule, TCandidate, TDecisionData>(this IEnumerable<Func<TRule>> rulesCollection, TCandidate candidate, TDecisionData decisionData)
-			where TRule : IRule<TCandidate, TDecisionData>
-		{
-			if (rulesCollection != null)
-			{
-				foreach (Func<TRule> specificationDelegate in rulesCollection)
-				{
-					IRule<TCandidate, TDecisionData> rule = specificationDelegate();
-					rule.DecisionData = decisionData;
+        private class RuleWithDecisionData<TCandidate, TDecisionData> : Rule<TCandidate, TDecisionData>
+        {
+            private readonly IRule<TCandidate> rule;
 
-					RuleResult ruleResult = rule.IsSatisfiedBy(candidate);
+            public RuleWithDecisionData(IRule<TCandidate> rule)
+            {
+                this.rule = rule;
+            }
 
-					if (!ruleResult)
-						return ruleResult;
-				}
-			}
-
-			return new RuleResult(true);
-		}
+            public override RuleResult IsSatisfiedBy(TCandidate candidate)
+            {
+                return rule.IsSatisfiedBy(candidate);
+            }
+        }
 	}
 }

@@ -55,25 +55,10 @@ namespace Jodo.Tests
             Assert.AreEqual(typeof(RuleThatWillAlwaysPass), rules.ToList()[1].Invoke().GetType());
         }
 
-		[Test]
-        public void GetRuleFor_WhenNoRulesHaveBeenRegisteredForTheRequestedType_NullRuleReturned()
-		{
-            var rule = RulesProvider.GetRuleFor<IAccountBalanceRules, decimal>(typeof(decimal));
-            Assert.IsTrue(rule.GetType().Equals(typeof(NullRule<decimal>)));
-		}
-
-        [Test]
-        public void GetRuleFor_WhenNoRulesHaveBeenRegistered_NullRuleReturned()
-        {
-            rulesEngine = new RulesEngine(); 
-            var rule = RulesProvider.GetRuleFor<IAccountBalanceRules, decimal>(typeof(decimal));
-            Assert.IsTrue(rule.GetType().Equals(typeof(NullRule<decimal>)));
-        }
-
         [Test]
         public void RegisterRule_WithRuleContextClassInsteadOfAInterface_ThrowsException()
         {
-            Action action = () => RulesInitializer.RegisterRule<RuleContextObjectAsAClassInsteadOfAInterface, decimal>(typeof(Account), () => new RuleThatWillAlwaysPass());
+            Action action = () => RulesInitializer.RegisterRule<RuleContextThatIsAClassInsteadOfAInterface, decimal>(typeof(Account), () => new RuleThatWillAlwaysPass());
             Assert.Throws<RulesInitializationException>(new TestDelegate(action));
         }
 

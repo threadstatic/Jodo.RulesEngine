@@ -15,13 +15,13 @@ namespace Jodo.Tests
 
     }
 
-    #region rules context objects
+    #region Rules Context Objects
 
     public interface IAccountBalanceRules : IRule<decimal> { }
     public interface IRuleContextWithDecimalDecisionData : IRule<decimal, decimal> { }
     public interface IRuleContextWithNullableDecisionData : IRule<decimal, Account> { }
 
-    public class RuleContextObjectAsAClassInsteadOfAInterface : IRule<decimal>
+    public class RuleContextThatIsAClassInsteadOfAInterface : IRule<decimal>
     {
         public string Description
         {
@@ -48,6 +48,14 @@ namespace Jodo.Tests
         public override RuleResult IsSatisfiedBy(decimal candidate)
         {
             return new RuleResult(true);
+        }
+    }
+
+    public class RuleThatWillAlwaysFail : Rule<decimal, decimal>
+    {
+        public override RuleResult IsSatisfiedBy(decimal candidate)
+        {
+            return new RuleResult(false);
         }
     }
 

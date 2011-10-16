@@ -34,6 +34,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -42,7 +43,6 @@
     <Compile Include="DecisionDataTypeMismatchException.cs" />
     <Compile Include="IRulesInitializer.cs" />
     <Compile Include="IRulesProvider.cs" />
-    <Compile Include="Rules\NullRule.cs" />
     <Compile Include="Rules\RulesRunnerExtensions.cs" />
     <Compile Include="Rules\IRulesRunner.cs" />
     <Compile Include="Rules\RuleResult.cs" />

@@ -45,75 +45,18 @@ namespace Jodo
 
 		#region IRulesProvider Implementation
 
-		/// <summary>
-		///
-		/// </summary>
-		/// <typeparam name="TRuleContext"></typeparam>
-		/// <typeparam name="TCandidate"></typeparam>
+        /// <summary>
+        /// Returns all rules for the requested type.
+        /// </summary>
+		/// <typeparam name="TRuleContext">The context in which to retrieve rules for.</typeparam>
+		/// <typeparam name="TCandidate">The rule candidate type.</typeparam>
 		/// <param name="typeToGetRulesFor">The type to retrieve the registered rules for.</param>
-		/// <returns></returns>
+        /// <returns>A IEnumerable of rule factories.</returns>
 		IEnumerable<Func<IRule<TCandidate>>> IRulesProvider.GetRulesFor<TRuleContext, TCandidate>(Type typeToGetRulesFor)
 		{
 			return new RulesFetcher<TRuleContext, TCandidate, object>().GetRulesFor(typeToGetRulesFor);
 		}
-
-		/// <summary>
-		/// Merges all registered specifications for the supplied object
-		/// into one composite specification using an AND <see cref="RuleCompositionStrategy"/>.	
-		/// </summary>
-		/// <typeparam name="TRuleContext"></typeparam>
-		/// <typeparam name="TCandidate"></typeparam>
-		/// <param name="typeToGetRulesFor">The type to retrieve the registered rules for.</param>
-		/// <returns></returns>
-		IRule<TCandidate> IRulesProvider.GetRuleFor<TRuleContext, TCandidate>(Type typeToGetRulesFor)
-		{
-			return new RulesFetcher<TRuleContext, TCandidate, object>().GetRuleFor(typeToGetRulesFor, RuleCompositionStrategy.And, null);
-		}
-
-		/// <summary>
-		/// Merges all registered specifications for the supplied object
-		/// into one composite specification using a <see cref="RuleCompositionStrategy"/>.	
-		/// </summary>
-		/// <typeparam name="TRuleContext"></typeparam>
-		/// <typeparam name="TCandidate"></typeparam>
-		/// <param name="typeToGetRulesFor">The type to retrieve the registered rules for.</param>
-		/// <param name="compositionStrategy"></param>
-		/// <returns></returns>
-		IRule<TCandidate> IRulesProvider.GetRuleFor<TRuleContext, TCandidate>(Type typeToGetRulesFor, RuleCompositionStrategy compositionStrategy)
-		{
-			return new RulesFetcher<TRuleContext, TCandidate, object>().GetRuleFor(typeToGetRulesFor, compositionStrategy, null);
-		}
-
-		/// <summary>
-		/// Merges all registered specifications for the supplied object
-		/// into one composite specification using an AND <see cref="RuleCompositionStrategy"/>.	
-		/// </summary>
-		/// <typeparam name="TRuleContext"></typeparam>
-		/// <typeparam name="TCandidate"></typeparam>
-        /// <typeparam name="TDecisionData"></typeparam>
-		/// <param name="typeToGetRulesFor">The type to retrieve the registered rules for.</param>
-        /// <param name="decisionData"></param>
-		/// <returns></returns>
-        IRule<TCandidate> IRulesProvider.GetRuleFor<TRuleContext, TCandidate, TDecisionData>(Type typeToGetRulesFor, TDecisionData decisionData)
-		{
-            return new RulesFetcher<TRuleContext, TCandidate, TDecisionData>().GetRuleFor(typeToGetRulesFor, RuleCompositionStrategy.And, decisionData);
-		}
-
-		/// <summary>
-		/// Merges all registered specifications for the supplied object
-		/// into one composite specification using a <see cref="RuleCompositionStrategy"/>.	
-		/// </summary>
-		/// <typeparam name="TRuleContext"></typeparam>
-		/// <typeparam name="TCandidate"></typeparam>
-        /// <typeparam name="TDecisionData"></typeparam>
-		/// <param name="typeToGetRulesFor">The type to retrieve the registered rules for.</param>
-		/// <param name="compositionStrategy"></param>
-		/// <returns></returns>
-        IRule<TCandidate> IRulesProvider.GetRuleFor<TRuleContext, TCandidate, TDecisionData>(Type typeToGetRulesFor, RuleCompositionStrategy compositionStrategy, TDecisionData decisionData)
-		{
-            return new RulesFetcher<TRuleContext, TCandidate, TDecisionData>().GetRuleFor(typeToGetRulesFor, compositionStrategy, decisionData);
-		}
-
+		
 		#endregion
 
         #region IRulesRunner Implementation
@@ -154,48 +97,6 @@ namespace Jodo
 
         private class RulesFetcher<TRuleContext, TCandidate, TDecisionData> where TRuleContext : IRule<TCandidate>
 		{
-            public IRule<TCandidate> GetRuleFor(Type type, RuleCompositionStrategy compositionStrategy, TDecisionData decisionData)
-			{
-				List<Func<IRule<TCandidate>>> ruleDelegates = GetRulesFor(type);
-				if (ruleDelegates.Count < 1)
-					return new NullRule<TCandidate>();
-
-				List<IRule<TCandidate>> rules = new List<IRule<TCandidate>>();
-
-				IRule<TCandidate> compositeRule = ruleDelegates[0].Invoke();
-                SetDecisionData(compositeRule, decisionData);
-
-				rules.Add(compositeRule);
-
-				for (int i = 1; i < ruleDelegates.Count; i++)
-				{
-					// we must invoke the delegate in order to evaluate the runtime type it will return
-					// we are looking to see if we already have that Specification Type.
-					IRule<TCandidate> spec = ruleDelegates[i].Invoke();
-
-					if (rules.Contains(spec, new SpecificationComparer<TCandidate>()))
-						continue;
-
-					rules.Add(spec);
-                    SetDecisionData(spec, decisionData);
-
-					switch (compositionStrategy)
-					{
-						case RuleCompositionStrategy.And:
-							compositeRule = compositeRule.And(spec);
-							break;
-						case RuleCompositionStrategy.Or:
-							compositeRule = compositeRule.Or(spec);
-							break;
-						default:
-							compositeRule = compositeRule.And(spec);
-							break;
-					}
-				}
-
-				return compositeRule;
-			}
-
 			public List<Func<IRule<TCandidate>>> GetRulesFor(Type type)
 			{
 				List<Func<IRule<TCandidate>>> rules = new List<Func<IRule<TCandidate>>>();
@@ -204,14 +105,6 @@ namespace Jodo
 				GetRulesForAllClasses(rules, type);
 
 				return rules;
-			}
-
-            private void SetDecisionData(IRule<TCandidate> spec, TDecisionData decisionData)
-			{
-                IRule<TCandidate, TDecisionData> decisionDataRule = spec as IRule<TCandidate, TDecisionData>;
-
-                if (decisionDataRule != null)
-                    decisionDataRule.DecisionData = decisionData;
 			}
 
 			private void GetRulesForAllInterfaces(List<Func<IRule<TCandidate>>> rules, Type type)
@@ -243,19 +136,6 @@ namespace Jodo
 
 				if (type.BaseType != null)
 					GetRulesForAllClasses(rules, type.BaseType);
-			}
-
-			private class SpecificationComparer<TCand> : IEqualityComparer<IRule<TCand>>
-			{
-				public bool Equals(IRule<TCand> x, IRule<TCand> y)
-				{
-					return x.GetType() == y.GetType();
-				}
-
-				public int GetHashCode(IRule<TCand> obj)
-				{
-					return obj.GetType().GetHashCode();
-				}
 			}
 		}
 
