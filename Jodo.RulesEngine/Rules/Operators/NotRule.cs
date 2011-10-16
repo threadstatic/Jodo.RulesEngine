@@ -1,16 +1,37 @@
 ﻿
 namespace Jodo.Rules.Operators
 {
-	internal class NotRule<T> : Rule<T>
-	{
-		private readonly IRule<T> ruleWrapped;
+    public class NotRule<TCandidate, TDecisionData> : Rule<TCandidate, TDecisionData>
+    {
+        private readonly IRule<TCandidate, TDecisionData> ruleWrapped;
 
-		internal NotRule(IRule<T> rule)
+        public NotRule(IRule<TCandidate, TDecisionData> rule)
+        {
+            ruleWrapped = rule;
+        }
+
+        public override RuleResult IsSatisfiedBy(TCandidate candidate)
+        {
+            ruleWrapped.DecisionData = DecisionData;
+            RuleResult ruleResult = ruleWrapped.IsSatisfiedBy(candidate);
+
+            if (!ruleResult)
+                return new RuleResult(true);
+
+            return new RuleResult(false, ruleResult.Messages);
+        }
+    }
+
+    public class NotRule<TCandidate> : Rule<TCandidate>
+	{
+		private readonly IRule<TCandidate> ruleWrapped;
+
+        public NotRule(IRule<TCandidate> rule)
 		{
 			ruleWrapped = rule;
 		}
 
-		public override RuleResult IsSatisfiedBy(T candidate)
+		public override RuleResult IsSatisfiedBy(TCandidate candidate)
 		{
 			RuleResult ruleResult = ruleWrapped.IsSatisfiedBy(candidate);
 

@@ -25,10 +25,25 @@ namespace Jodo.Rules
             return new OrRule<TCandidate>(rule1, rule2);
 		}
 
+        public static IRule<TCandidate, TDecisionData> Or<TCandidate, TDecisionData>(this IRule<TCandidate, TDecisionData> rule1, IRule<TCandidate> rule2)
+        {
+            return new OrRule<TCandidate, TDecisionData>(rule1, rule2.ConvertToRuleWithDecisionData<TCandidate, TDecisionData>());
+        }
+
+        public static IRule<TCandidate, TDecisionData> Or<TCandidate, TDecisionData>(this IRule<TCandidate, TDecisionData> rule1, IRule<TCandidate, TDecisionData> rule2)
+        {
+            return new OrRule<TCandidate, TDecisionData>(rule1, rule2);
+        }
+
         public static IRule<TCandidate> Not<TCandidate>(this IRule<TCandidate> rule)
 		{
             return new NotRule<TCandidate>(rule);
 		}
+
+        public static IRule<TCandidate, TDecisionData> Not<TCandidate, TDecisionData>(this IRule<TCandidate, TDecisionData> rule)
+        {
+            return new NotRule<TCandidate, TDecisionData>(rule);
+        }
 
         private static RuleWithDecisionData<TCandidate, TDecisionData> ConvertToRuleWithDecisionData<TCandidate, TDecisionData>(this IRule<TCandidate> rule)
 		{
