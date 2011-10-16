@@ -6,6 +6,11 @@ namespace Jodo.Rules.Operators
         private readonly IRule<TCandidate, TDecisionData> rule1;
         private readonly IRule<TCandidate, TDecisionData> rule2;
 
+        public override string Name
+        {
+            get { return string.Format("{0} Or {1}", rule1.Name, rule2.Name); }
+        }
+
         public OrRule(IRule<TCandidate, TDecisionData> rule1, IRule<TCandidate, TDecisionData> rule2)
         {
             this.rule1 = rule1;
@@ -30,6 +35,11 @@ namespace Jodo.Rules.Operators
 	{
 		private readonly IRule<T> rule1;
 		private readonly IRule<T> rule2;
+
+        public override string Name
+        {
+            get { return string.Format("{0} Or {1}", rule1.Name, rule2.Name); }
+        }
 
         public OrRule(IRule<T> rule1, IRule<T> rule2)
 		{

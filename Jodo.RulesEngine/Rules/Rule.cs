@@ -6,6 +6,7 @@ namespace Jodo.Rules
 	{
 	    public string Description { get; protected set; }
         public string FailedMessage { get; protected set; }
+        public virtual string Name { get { return GetType().Name; } }
 
 		protected Rule()
 		{

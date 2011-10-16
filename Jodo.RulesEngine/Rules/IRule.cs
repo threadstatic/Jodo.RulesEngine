@@ -3,6 +3,7 @@ namespace Jodo.Rules
 {
 	public interface IRule<in TCandidate> 
 	{
+        string Name { get; }
 		string Description { get; }
 		string FailedMessage { get; }
         RuleResult IsSatisfiedBy(TCandidate candidate);

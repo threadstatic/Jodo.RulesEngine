@@ -37,6 +37,14 @@ namespace Jodo
         }
     }
 
+    public class RuleThatWillAlwaysFail : Rule<decimal>
+    {
+        public override RuleResult IsSatisfiedBy(decimal candidate)
+        {
+            return new RuleResult(false);
+        }
+    }
+
     // rule context interface without decision data
     public interface IAccountStatusWithdrawRules : IRule<Account> { }
 

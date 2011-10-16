@@ -54,6 +54,11 @@ namespace Jodo.Rules
         {
             private readonly IRule<TCandidate> rule;
 
+            public override string Name
+            {
+                get { return string.Format("{0}", rule.Name); }
+            }
+
             public RuleWithDecisionData(IRule<TCandidate> rule)
             {
                 this.rule = rule;

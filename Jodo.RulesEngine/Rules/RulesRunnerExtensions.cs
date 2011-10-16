@@ -48,7 +48,7 @@ namespace Jodo.Rules
         private static void RunRule<TCandidate>(IRule<TCandidate> rule, TCandidate candidate)
         {
 #if DEBUG
-            Console.WriteLine(String.Format("Running Rule: {0}", rule));
+            Console.WriteLine(String.Format("Running Rule: {0}", rule.Name));
 #endif
             RuleResult ruleResult = rule.IsSatisfiedBy(candidate);
 

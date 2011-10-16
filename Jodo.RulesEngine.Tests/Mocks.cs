@@ -21,19 +21,9 @@ namespace Jodo.Tests
     public interface IRuleContextWithDecimalDecisionData : IRule<decimal, decimal> { }
     public interface IRuleContextWithNullableDecisionData : IRule<decimal, Account> { }
 
-    public class RuleContextThatIsAClassInsteadOfAInterface : IRule<decimal>
+    public class RuleContextThatIsAClassInsteadOfAInterface : Rule<decimal>
     {
-        public string Description
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public string FailedMessage
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public RuleResult IsSatisfiedBy(decimal candidate)
+        public override RuleResult IsSatisfiedBy(decimal candidate)
         {
             throw new NotImplementedException();
         }
