@@ -45,13 +45,13 @@ namespace Jodo
 
         private static void Run()
         {
-            // Example using RulesRunner without DependencyInjection. The default RulesRunner class will be used, or a explicitly regesitered RulesRunner, using the static RegisterRulesRunner method on the RulesEngine
+            // Example using RulesRunner with the default registered RulesRunner, or a explicitly regesitered RulesRunner, using the static RegisterRulesRunner method on the RulesEngine. For mocking you would use the RegisterRulesRunner passing in a mock.
             // Create and Save a Account with an Id of 1
             new AccountRepository().Save(new Account(1));
 
             // Example using RulesRunner provided via DependencyInjection.
             //Create and Save a Account with an Id of 2,
-            new AccountRepository().Save(new AccountUsingRulesRunnerWithDependencyInjection(2, Container.GetExportedValue<IRulesRunner>()));
+            new AccountRepository().Save(new AccountUsingInjectedRulesRunner(2, Container.GetExportedValue<IRulesRunner>()));
 
             // Execute a commands for both accounts
             new AccountWithdrawlHandler(new AccountRepository()).Handle(new AccountWithdrawl(1, 25));
@@ -60,17 +60,8 @@ namespace Jodo
 
         private class MockRulesRunner : IRulesRunner
         {
-            public void TestRules<TRuleContext, TCandidate>(Type typeToGetRulesFor, TCandidate candidate) where TRuleContext : IRule<TCandidate>
-            {
-                
-            }
-
-            public void TestRules<TRuleContext, TCandidate, TDecisionData>(Type typeToGetRulesFor, TCandidate candidate, TDecisionData decisionData) where TRuleContext : IRule<TCandidate, TDecisionData>
-            {
-                
-            }
+            public void TestRules<TRuleContext, TCandidate>(Type typeToGetRulesFor, TCandidate candidate) where TRuleContext : IRule<TCandidate> { }
+            public void TestRules<TRuleContext, TCandidate, TDecisionData>(Type typeToGetRulesFor, TCandidate candidate, TDecisionData decisionData) where TRuleContext : IRule<TCandidate, TDecisionData> { }
         }
-
     }
-
 }

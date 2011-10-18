@@ -3,15 +3,15 @@ using Jodo.Rules;
 
 namespace Jodo
 {
-    public class AccountUsingRulesRunnerWithDependencyInjection : Account
+    public class AccountUsingInjectedRulesRunner : Account
     {
         private readonly IRulesRunner rulesRunner;
 
-        public AccountUsingRulesRunnerWithDependencyInjection(int id) : base(id)
+        public AccountUsingInjectedRulesRunner(int id) : base(id)
         {
         }
 
-        public AccountUsingRulesRunnerWithDependencyInjection(int id, IRulesRunner rulesRunner) :this(id)
+        public AccountUsingInjectedRulesRunner(int id, IRulesRunner rulesRunner) :this(id)
         {
             this.rulesRunner = rulesRunner;
         }
