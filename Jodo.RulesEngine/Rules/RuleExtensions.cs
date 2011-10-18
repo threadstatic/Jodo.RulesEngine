@@ -5,21 +5,6 @@ namespace Jodo.Rules
 {
 	public static class RuleExtensions
 	{
-        public static IRule<TCandidate> And<TCandidate>(this IRule<TCandidate> rule1, IRule<TCandidate> rule2)
-		{
-            return new AndRule<TCandidate>(rule1, rule2);
-		}
-
-        public static IRule<TCandidate, TDecisionData> And<TCandidate, TDecisionData>(this IRule<TCandidate, TDecisionData> rule1, IRule<TCandidate> rule2)
-        {
-            return new AndRule<TCandidate, TDecisionData>(rule1, rule2.ConvertToRuleWithDecisionData<TCandidate, TDecisionData>());
-        }
-
-        public static IRule<TCandidate, TDecisionData> And<TCandidate, TDecisionData>(this IRule<TCandidate, TDecisionData> rule1, IRule<TCandidate, TDecisionData> rule2)
-        {
-            return new AndRule<TCandidate, TDecisionData>(rule1, rule2);
-        }
-
         public static IRule<TCandidate> Or<TCandidate>(this IRule<TCandidate> rule1, IRule<TCandidate> rule2)
 		{
             return new OrRule<TCandidate>(rule1, rule2);

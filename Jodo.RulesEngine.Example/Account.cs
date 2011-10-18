@@ -1,4 +1,5 @@
-﻿using Jodo.Rules;
+﻿using System;
+using Jodo.Rules;
 
 namespace Jodo
 {
@@ -14,6 +15,8 @@ namespace Jodo
             Id = id;
             this.rulesRunner = rulesRunner;
             Balance = -10;
+
+
         }
 
         public void MakeDeposit(decimal amount)
@@ -25,7 +28,8 @@ namespace Jodo
         {
             return Balance <= 0 ? AccountStatus.OnHold : AccountStatus.GoodStanding;
         }
-        
+
+        [EnforeRule(typeof(IAccountBalanceWithdrawlRules), typeof(Account))]
         public void WithDrawl(decimal amount)
         {
             rulesRunner.TestRules<IAccountBalanceWithdrawlRules, decimal, Account>(GetType(), Balance, this);
@@ -38,5 +42,28 @@ namespace Jodo
             OnHold,
             GoodStanding
         }
+
+        public class GetRuleData
+        {
+            public object Candidate { get; set; }
+            public Account DecisionData { get; set; }
+            public Type TypeToGetRulesFor { get; set; }
+
+            public GetRuleData(Account account)
+            {
+                DecisionData = account;
+                Candidate = account.Balance;
+                TypeToGetRulesFor = account.GetType();
+            }
+        }
     }
+
+    
+    public class EnforeRuleAttribute : Attribute
+    {
+        public EnforeRuleAttribute(object context, Type type)
+        {
+        }
+    }
+
 }

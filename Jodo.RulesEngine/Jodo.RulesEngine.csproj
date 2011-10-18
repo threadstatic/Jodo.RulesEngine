@@ -34,7 +34,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -49,9 +48,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RulesEngine.cs" />
     <Compile Include="RulesInitializationException.cs" />
-    <Compile Include="RuleCompositionStrategy.cs" />
     <Compile Include="Rules\IRule.cs" />
-    <Compile Include="Rules\Operators\AndRule.cs" />
     <Compile Include="Rules\Operators\NotRule.cs" />
     <Compile Include="Rules\Operators\OrRule.cs" />
     <Compile Include="Rules\Rule.cs" />

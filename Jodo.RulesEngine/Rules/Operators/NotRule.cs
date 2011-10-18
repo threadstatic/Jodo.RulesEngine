@@ -5,6 +5,11 @@ namespace Jodo.Rules.Operators
     {
         private readonly IRule<TCandidate, TDecisionData> ruleWrapped;
 
+        public override string Name
+        {
+            get { return string.Format("{0}", ruleWrapped.Name); }
+        }
+
         public NotRule(IRule<TCandidate, TDecisionData> rule)
         {
             ruleWrapped = rule;
@@ -25,6 +30,11 @@ namespace Jodo.Rules.Operators
     public class NotRule<TCandidate> : Rule<TCandidate>
 	{
 		private readonly IRule<TCandidate> ruleWrapped;
+
+        public override string Name
+        {
+            get { return string.Format("{0}", ruleWrapped.Name); }
+        }
 
         public NotRule(IRule<TCandidate> rule)
 		{

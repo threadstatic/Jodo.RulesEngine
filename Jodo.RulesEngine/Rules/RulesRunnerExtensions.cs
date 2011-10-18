@@ -54,9 +54,9 @@ namespace Jodo.Rules
 
 #if DEBUG
             if (ruleResult)
-                Console.WriteLine(String.Format("PASSED : {0}.", (String)ruleResult));
+                Console.WriteLine(String.Format("PASSED: {0}", (String)ruleResult));
             else
-                Console.WriteLine(String.Format("FAILED : {0}.", (String)ruleResult));
+                Console.WriteLine(String.Format("FAILED: {0}", (String)ruleResult));
 #endif
             if (!ruleResult)
                 throw new InvalidOperationException(ruleResult);

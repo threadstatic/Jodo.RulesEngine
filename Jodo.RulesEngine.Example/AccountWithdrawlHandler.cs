@@ -55,11 +55,10 @@ namespace Jodo
         void Save(Account account);
         Account Load(int id);
     }
-
-    [Export(typeof(IAccountRepository))]
+   
     public class AccountRepository : IAccountRepository
     {
-        private static Dictionary<int, Account> store = new Dictionary<int, Account>();
+        private static readonly Dictionary<int, Account> store = new Dictionary<int, Account>();
        
         public void Save(Account account)
         {
