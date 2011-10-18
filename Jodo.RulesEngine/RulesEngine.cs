@@ -11,6 +11,8 @@ namespace Jodo
 	public sealed class RulesEngine : IRulesInitializer, IRulesProvider, IRulesRunner, IDisposable
 	{
 		private static readonly Dictionary<RuleKey, IEnumerable<object>> RulesStore = new Dictionary<RuleKey, IEnumerable<object>>();
+        private static IRulesRunner rulesRunner = new RulesEngine();
+        internal static IRulesRunner RulesRunner { get { return rulesRunner; } }
 
 		#region IRulesInitializer Implementation
 
@@ -63,19 +65,28 @@ namespace Jodo
 
         void IRulesRunner.TestRules<TRuleContext, TCandidate>(Type typeToGetRulesFor, TCandidate candidate)
         {
-            this.TestRules<TRuleContext, TCandidate>(this, typeToGetRulesFor, candidate);
+            RulesRunner.TestRules<TRuleContext, TCandidate>(this, typeToGetRulesFor, candidate);
         }
 
         void IRulesRunner.TestRules<TRuleContext, TCandidate, TDecisionData>(Type typeToGetRulesFor, TCandidate candidate, TDecisionData decisionData) 
         {
-            this.TestRules<TRuleContext, TCandidate, TDecisionData>(this, typeToGetRulesFor, candidate, decisionData);
+            RulesRunner.TestRules<TRuleContext, TCandidate, TDecisionData>(this, typeToGetRulesFor, candidate, decisionData);
+        }
+
+        #endregion
+
+        #region RulesRunner Registration
+
+        public static void RegisterRulesRunner(IRulesRunner runner)
+        {
+            rulesRunner = runner;
         }
 
         #endregion
 
         #region Classes
 
-		private class RuleKey
+        private class RuleKey
 		{
 			private TypePair TypePair { get; set; }
 		

@@ -5,18 +5,13 @@ namespace Jodo
 {
     public class Account
     {
-        private readonly IRulesRunner rulesRunner;
-
         public int Id { get; private set; }
         public decimal Balance { get; private set; }
 
-        public Account(int id, IRulesRunner rulesRunner)
+        public Account(int id)
         {
             Id = id;
-            this.rulesRunner = rulesRunner;
             Balance = -10;
-
-
         }
 
         public void MakeDeposit(decimal amount)
@@ -32,29 +27,20 @@ namespace Jodo
         [EnforeRule(typeof(IAccountBalanceWithdrawlRules), typeof(Account))]
         public void WithDrawl(decimal amount)
         {
-            rulesRunner.TestRules<IAccountBalanceWithdrawlRules, decimal, Account>(GetType(), Balance, this);
-            rulesRunner.TestRules<IAccountStatusWithdrawRules, Account>(GetType(), this);
+            TestWithDrawlRules();
             Balance -= amount;
+        }
+
+        protected virtual void TestWithDrawlRules()
+        {
+            RulesRunner.TestRules<IAccountBalanceWithdrawlRules, decimal, Account>(GetType(), Balance, this);
+            RulesRunner.TestRules<IAccountStatusWithdrawRules, Account>(GetType(), this);
         }
 
         public enum AccountStatus
         {
             OnHold,
             GoodStanding
-        }
-
-        public class GetRuleData
-        {
-            public object Candidate { get; set; }
-            public Account DecisionData { get; set; }
-            public Type TypeToGetRulesFor { get; set; }
-
-            public GetRuleData(Account account)
-            {
-                DecisionData = account;
-                Candidate = account.Balance;
-                TypeToGetRulesFor = account.GetType();
-            }
         }
     }
 
@@ -66,4 +52,17 @@ namespace Jodo
         }
     }
 
+    public class GetRuleData
+    {
+        public object Candidate { get; set; }
+        public Account DecisionData { get; set; }
+        public Type TypeToGetRulesFor { get; set; }
+
+        public GetRuleData(Account account)
+        {
+            DecisionData = account;
+            Candidate = account.Balance;
+            TypeToGetRulesFor = account.GetType();
+        }
+    }
 }

@@ -42,6 +42,7 @@
     <Compile Include="DecisionDataTypeMismatchException.cs" />
     <Compile Include="IRulesInitializer.cs" />
     <Compile Include="IRulesProvider.cs" />
+    <Compile Include="Rules\RulesRunner.cs" />
     <Compile Include="Rules\RulesRunnerExtensions.cs" />
     <Compile Include="Rules\IRulesRunner.cs" />
     <Compile Include="Rules\RuleResult.cs" />
