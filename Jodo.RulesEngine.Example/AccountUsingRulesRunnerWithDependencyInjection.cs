@@ -6,7 +6,6 @@ namespace Jodo
     public class AccountUsingRulesRunnerWithDependencyInjection : Account
     {
         private readonly IRulesRunner rulesRunner;
-       
 
         public AccountUsingRulesRunnerWithDependencyInjection(int id) : base(id)
         {

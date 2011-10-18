@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition.Hosting;
+using System.Reflection;
 using Jodo.Rules;
 
 namespace Jodo
@@ -10,7 +11,17 @@ namespace Jodo
 
         public static CompositionContainer Container
         {
-            get { return container ?? (container = container = new CompositionContainer(new AssemblyCatalog(typeof(RulesEngine).Assembly))); }
+            get
+            {
+                return container ?? (container = container = new CompositionContainer
+                (
+                    new AggregateCatalog
+                    (
+                        new AssemblyCatalog(Assembly.GetExecutingAssembly()),
+                        new AssemblyCatalog(typeof(RulesEngine).Assembly)
+                    )
+                ));
+            }
         }
 
         static void Main(string[] args)
@@ -39,12 +50,12 @@ namespace Jodo
             new AccountRepository().Save(new Account(1));
 
             // Example using RulesRunner provided via DependencyInjection.
-            //Create and Save a Account with an Id of 2
+            //Create and Save a Account with an Id of 2,
             new AccountRepository().Save(new AccountUsingRulesRunnerWithDependencyInjection(2, Container.GetExportedValue<IRulesRunner>()));
 
             // Execute a commands for both accounts
             new AccountWithdrawlHandler(new AccountRepository()).Handle(new AccountWithdrawl(1, 25));
-            new AccountWithdrawlHandler(new AccountRepository()).Handle(new AccountWithdrawl(2, 25));
+            Container.GetExportedValue<AccountWithdrawlHandler>().Handle(new AccountWithdrawl(2, 25));
         }
 
         private class MockRulesRunner : IRulesRunner
