@@ -41,7 +41,6 @@
   <ItemGroup>
     <Compile Include="Account.cs" />
     <Compile Include="AccountWithdrawlHandler.cs" />
-    <Compile Include="ClassUsingRulesRunnerWithoutDependencyInjection.cs" />
     <Compile Include="AccountUsingInjectedRulesRunner.cs" />
     <Compile Include="Rules.cs" />
     <Compile Include="Program.cs" />

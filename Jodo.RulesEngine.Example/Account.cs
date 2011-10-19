@@ -24,7 +24,6 @@ namespace Jodo
             return Balance <= 0 ? AccountStatus.OnHold : AccountStatus.GoodStanding;
         }
 
-        [EnforeRule(typeof(IAccountBalanceWithdrawlRules), typeof(Account))]
         public void WithDrawl(decimal amount)
         {
             TestWithDrawlRules();
@@ -42,27 +41,19 @@ namespace Jodo
             OnHold,
             GoodStanding
         }
-    }
 
-    
-    public class EnforeRuleAttribute : Attribute
-    {
-        public EnforeRuleAttribute(object context, Type type)
+        public class GetRuleData
         {
-        }
-    }
+            public object Candidate { get; set; }
+            public Account DecisionData { get; set; }
+            public Type TypeToGetRulesFor { get; set; }
 
-    public class GetRuleData
-    {
-        public object Candidate { get; set; }
-        public Account DecisionData { get; set; }
-        public Type TypeToGetRulesFor { get; set; }
-
-        public GetRuleData(Account account)
-        {
-            DecisionData = account;
-            Candidate = account.Balance;
-            TypeToGetRulesFor = account.GetType();
+            public GetRuleData(Account account)
+            {
+                DecisionData = account;
+                Candidate = account.Balance;
+                TypeToGetRulesFor = account.GetType();
+            }
         }
     }
 }
