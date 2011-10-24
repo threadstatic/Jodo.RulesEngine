@@ -95,12 +95,5 @@ namespace Jodo.Tests
         {
             Assert.DoesNotThrow(() => RulesRunner.TestRules<IRuleContextWithDecimalDecisionData, decimal>(RulesProvider, typeof(Account), 100));
         }
-
-        [Test]
-        public void TestRulesWithOrRuleCompositionStrategy_TwoRulesRegisteredAndOneRuleFails_ExceptionThrown()
-        {
-            RulesInitializer.RegisterRule<IAccountBalanceRules, decimal>(typeof(Account), () => new RuleThatWillAlwaysFail().Or(new RuleThatWillAlwaysPass()));
-            Assert.Catch(typeof(InvalidOperationException), () => RulesRunner.TestRules<IAccountBalanceRules, decimal>(RulesProvider, typeof(Account), 99));
-        }
     }
 }

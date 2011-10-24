@@ -34,8 +34,7 @@ namespace Jodo
         private static void RegisterRules()
         {
             IRulesInitializer rulesInitializer = new RulesEngine();
-            //RulesEngine.RegisterRulesRunner(new MockRulesRunner());
-
+            
             rulesInitializer
                 .RegisterRule<IAccountBalanceWithdrawlRules, decimal>(typeof(Account), () => new MinimumAccountBalanceToAllowWithdrawl(100).Or(new RuleThatWillAlwaysFail()))
                 .RegisterRule<IAccountBalanceWithdrawlRules, decimal>(typeof(Account), () => new RuleThatWillAlwaysPass())
@@ -45,13 +44,25 @@ namespace Jodo
 
         private static void Run()
         {
-            // Example using RulesRunner with the default registered RulesRunner, or a explicitly regesitered RulesRunner, using the static RegisterRulesRunner method on the RulesEngine. For mocking you would use the RegisterRulesRunner passing in a mock.
-            
+            // Example using RulesRunner with the default registered RulesRunner
+          
             // Create and Save a Account with an Id of 1
             new AccountRepository().Save(new Account(1));
             // try to withdrawl
             new AccountWithdrawlHandler(new AccountRepository()).Handle(new AccountWithdrawl(1, 25));
 
+
+
+            // Example using RulesRunner with a explicitly regesitered RulesRunner, using the static RegisterRulesRunner method on the RulesEngine. This method would be used while testing, and with a do nothing Mock RulesRunner.
+            
+            RulesEngine.RegisterRulesRunner(new MockRulesRunner());
+
+            // Create and Save a Account with an Id of 1
+            new AccountRepository().Save(new Account(1));
+            // try to withdrawl
+            new AccountWithdrawlHandler(new AccountRepository()).Handle(new AccountWithdrawl(1, 25));
+
+            
 
             // Example using RulesRunner provided via DependencyInjection.
 

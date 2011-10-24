@@ -41,19 +41,5 @@ namespace Jodo
             OnHold,
             GoodStanding
         }
-
-        public class GetRuleData
-        {
-            public object Candidate { get; set; }
-            public Account DecisionData { get; set; }
-            public Type TypeToGetRulesFor { get; set; }
-
-            public GetRuleData(Account account)
-            {
-                DecisionData = account;
-                Candidate = account.Balance;
-                TypeToGetRulesFor = account.GetType();
-            }
-        }
     }
 }
