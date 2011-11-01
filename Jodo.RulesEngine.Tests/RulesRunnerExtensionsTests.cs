@@ -84,7 +84,7 @@ namespace Jodo.Tests
         }
 
         [Test]
-        public void TestRules_RegisteredRuleHasDecisionDataAndTheDecisionDataOverloadIsNotUsed_ThrowsException()
+        public void TestRules_RegisteredRuleThatRequiresDecisionDataAndNoDecisionDataIsGiven_ThrowsException()
         {
             RulesInitializer.RegisterRule<IRuleContextWithNullableDecisionData, decimal>(typeof(Account), () => new RuleDeclaresAndUsesDecisionDataThatWillThrowAnExceptionIfNull());
             Assert.Catch(typeof(NullReferenceException), () => RulesRunner.TestRules<IRuleContextWithNullableDecisionData, decimal>(RulesProvider, typeof(Account), 100));

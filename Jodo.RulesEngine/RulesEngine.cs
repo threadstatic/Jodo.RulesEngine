@@ -27,8 +27,7 @@ namespace Jodo
             ValidateDecisionDataType<TRuleContext, TCandidate>(rules);
 
 			RuleKey key = new RuleKey(new TypePair(rulesForType, typeof(TRuleContext)));
-
-			// Overwrite a existing rule of the same type
+            
             if (RulesStore.ContainsKey(key))
             {
                 var existingRulesForKey = RulesStore[key].ToList();
