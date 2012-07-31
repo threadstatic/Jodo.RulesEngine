@@ -8,9 +8,9 @@ namespace Jodo
 {
     [Export(typeof(IRulesRunner))]
     [Export(typeof(IRulesInitializer))]
-	public sealed class RulesEngine : IRulesInitializer, IRulesProvider, IRulesRunner, IDisposable
+    public sealed class RulesEngine : IRulesProvider, IDisposable, IRulesEngine
 	{
-		private static readonly Dictionary<RuleKey, IEnumerable<object>> RulesStore = new Dictionary<RuleKey, IEnumerable<object>>();
+        private static readonly Dictionary<RuleKey, IEnumerable<object>> RulesStore = new Dictionary<RuleKey, IEnumerable<object>>();
         private static IRulesRunner rulesRunner = new RulesEngine();
         internal static IRulesRunner RulesRunner { get { return rulesRunner; } }
 
@@ -26,7 +26,7 @@ namespace Jodo
 			ValidateSpecificationContext<TRuleContext>();
             ValidateDecisionDataType<TRuleContext, TCandidate>(rules);
 
-			RuleKey key = new RuleKey(new TypePair(rulesForType, typeof(TRuleContext)));
+            var key = new RuleKey(rulesForType, typeof(TRuleContext), typeof(TCandidate));
             
             if (RulesStore.ContainsKey(key))
             {
@@ -55,7 +55,7 @@ namespace Jodo
         /// <returns>A IEnumerable of rule factories.</returns>
 		IEnumerable<Func<IRule<TCandidate>>> IRulesProvider.GetRulesFor<TRuleContext, TCandidate>(Type typeToGetRulesFor)
 		{
-			return new RulesFetcher<TRuleContext, TCandidate, object>().GetRulesFor(typeToGetRulesFor);
+			return new RulesFetcher<TRuleContext, TCandidate>().GetRulesFor(typeToGetRulesFor);
 		}
 		
 		#endregion
@@ -83,33 +83,19 @@ namespace Jodo
 
         #endregion
 
+        public static bool RuleIsRegisteredFor<TRule>(Type type)
+        {
+            var rules = RulesStore.Where(f => f.Key.ruleForType == type).SelectMany(s => s.Value).Cast<Delegate>().Select(del => del.DynamicInvoke(null));
+            return rules.Any(a => a.GetType() == typeof(TRule));
+        }
+
         #region Classes
 
-        private class RuleKey
-		{
-			private TypePair TypePair { get; set; }
-		
-			public RuleKey(TypePair typePair)
-			{
-				TypePair = typePair;
-			}
-
-			public override bool Equals(object obj)
-			{
-				return TypePair.Equals(((RuleKey)obj).TypePair);
-			}
-
-			public override int GetHashCode()
-			{
-				return TypePair.GetHashCode();
-			}
-		}
-
-        private class RulesFetcher<TRuleContext, TCandidate, TDecisionData> where TRuleContext : IRule<TCandidate>
+        private class RulesFetcher<TRuleContext, TCandidate> where TRuleContext : IRule<TCandidate>
 		{
 			public List<Func<IRule<TCandidate>>> GetRulesFor(Type type)
 			{
-				List<Func<IRule<TCandidate>>> rules = new List<Func<IRule<TCandidate>>>();
+				var rules = new List<Func<IRule<TCandidate>>>();
 
 				GetRulesForAllInterfaces(rules, type);
 				GetRulesForAllClasses(rules, type);
@@ -121,7 +107,7 @@ namespace Jodo
 			{
 				foreach (Type t in type.GetInterfaces())
 				{
-					RuleKey key = new RuleKey(new TypePair(t, typeof(TRuleContext)));
+                    var key = new RuleKey(t, typeof(TRuleContext), typeof(TCandidate));
 
 					if (RulesStore.ContainsKey(key))
 					{
@@ -133,7 +119,7 @@ namespace Jodo
 
 			private void GetRulesForAllClasses(List<Func<IRule<TCandidate>>> rules, Type type)
 			{
-				RuleKey key = new RuleKey(new TypePair(type, typeof(TRuleContext)));
+				var key = new RuleKey(type, typeof(TRuleContext), typeof(TCandidate));
 
 				if (RulesStore.ContainsKey(key))
 				{

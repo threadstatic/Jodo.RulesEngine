@@ -1,0 +1,16 @@
+/src/_ReSharper.RelocationMoverServices
+obj/
+[Bb]in
+[Dd]ebug*/
+[Rr]elease*/
+_ReSharper*/
+*.resharper
+[Tt]est[Rr]esult*
+*.csproj.user
+/src/Packages.dgml
+*.suo
+*.docstates
+*.ReSharper.user
+
+/Application/ServiceContractOutput
+*.datasource

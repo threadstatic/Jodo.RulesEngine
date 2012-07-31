@@ -61,7 +61,7 @@ namespace Jodo.Rules
 
         private static string FlattenMessage(string[] messages)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             foreach (var message in messages)
                 sb.AppendLine(message);
 

@@ -19,9 +19,9 @@ namespace Jodo.Tests
 
     public interface IAccountBalanceRules : IRule<decimal> { }
     public interface IRuleContextWithDecimalDecisionData : IRule<decimal, decimal> { }
-    public interface IRuleContextWithNullableDecisionData : IRule<decimal, Account> { }
+    public interface IRuleContextWithNullableDecisionData : Rules.IRule<decimal, Account> { }
 
-    public class RuleContextThatIsAClassInsteadOfAInterface : Rule<decimal>
+    public class RuleContextThatIsAClassInsteadOfAInterface : Rules.Rule<decimal>
     {
         public override RuleResult IsSatisfiedBy(decimal candidate)
         {
@@ -33,7 +33,7 @@ namespace Jodo.Tests
 
     #region Rules
 
-    public class RuleThatWillAlwaysPass : Rule<decimal>
+    public class RuleThatWillAlwaysPass : Rules.Rule<decimal>
     {
         public override RuleResult IsSatisfiedBy(decimal candidate)
         {
@@ -100,7 +100,7 @@ namespace Jodo.Tests
         }
     }
 
-    public class MeetsTheMinimumRequiredAccountBalance : Rule<decimal>
+    public class MeetsTheMinimumRequiredAccountBalance : Rules.Rule<decimal>
     {
         private readonly decimal minimumRequiredAccountBalance;
 

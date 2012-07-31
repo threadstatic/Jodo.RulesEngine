@@ -2,9 +2,10 @@
 using System.Linq;
 using FakeItEasy;
 using Jodo.Rules;
+using Jodo.Tests;
 using NUnit.Framework;
 
-namespace Jodo.Tests
+namespace Jodo
 {
 	public class RulesEngineTests
 	{
@@ -16,7 +17,7 @@ namespace Jodo.Tests
         public void Setup()
         {
             rulesEngine = new RulesEngine();
-            MeetsTheMinimumRequiredAccountBalance rule = new MeetsTheMinimumRequiredAccountBalance(100);
+            var rule = new MeetsTheMinimumRequiredAccountBalance(100);
             RulesInitializer.RegisterRule<IAccountBalanceRules, decimal>(typeof(Account), () => rule);
         }
 
@@ -36,7 +37,7 @@ namespace Jodo.Tests
         [Test]
         public void RegisterRule_WhenRuleHasAlreadyBeenRegisted_WillRegisterTheRuleAgain()
         {
-            MeetsTheMinimumRequiredAccountBalance rule = new MeetsTheMinimumRequiredAccountBalance(100);
+            var rule = new MeetsTheMinimumRequiredAccountBalance(100);
             RulesInitializer.RegisterRule<IAccountBalanceRules, decimal>(typeof(Account), () => rule);
             var rules = RulesProvider.GetRulesFor<IAccountBalanceRules, decimal>(typeof(Account));
 
@@ -47,7 +48,7 @@ namespace Jodo.Tests
         [Test]
         public void GetRulesFor_ReturnsAllRegisteredRules()
         {
-            RuleThatWillAlwaysPass rule = new RuleThatWillAlwaysPass();
+            var rule = new RuleThatWillAlwaysPass();
             RulesInitializer.RegisterRule<IAccountBalanceRules, decimal>(typeof(Account), () => rule);
 
             var rules = RulesProvider.GetRulesFor<IAccountBalanceRules, decimal>(typeof(Account));

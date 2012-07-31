@@ -59,7 +59,7 @@ namespace Jodo.Rules
                 Console.WriteLine(String.Format("FAILED: {0}", (String)ruleResult));
 #endif
             if (!ruleResult)
-                throw new InvalidOperationException(ruleResult);
+                throw new BusinessRuleViolatedException(ruleResult);
         }
     }
 }

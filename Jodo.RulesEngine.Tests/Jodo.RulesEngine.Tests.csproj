@@ -8,7 +8,7 @@
     <ProjectGuid>{DB4D0186-FE42-4E91-B89E-8451264CB6C3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Jodo.RulesEngine.Tests</RootNamespace>
+    <RootNamespace>Jodo</RootNamespace>
     <AssemblyName>Jodo.RulesEngine.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -53,6 +53,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RulesEngineTests.cs" />
     <Compile Include="RulesRunnerExtensionsTests.cs" />
+    <Compile Include="Testing\RuleTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Jodo.RulesEngine\Jodo.RulesEngine.csproj">

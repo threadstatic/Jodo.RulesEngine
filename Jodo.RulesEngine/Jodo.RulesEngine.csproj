@@ -39,9 +39,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessRuleViolatedException.cs" />
     <Compile Include="DecisionDataTypeMismatchException.cs" />
+    <Compile Include="IRulesEngine.cs" />
     <Compile Include="IRulesInitializer.cs" />
     <Compile Include="IRulesProvider.cs" />
+    <Compile Include="Testing\Rule.cs" />
     <Compile Include="Rules\RulesRunner.cs" />
     <Compile Include="Rules\RulesRunnerExtensions.cs" />
     <Compile Include="Rules\IRulesRunner.cs" />
@@ -54,7 +57,7 @@
     <Compile Include="Rules\Operators\OrRule.cs" />
     <Compile Include="Rules\Rule.cs" />
     <Compile Include="Rules\RuleExtensions.cs" />
-    <Compile Include="TypePair.cs" />
+    <Compile Include="RuleKey.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

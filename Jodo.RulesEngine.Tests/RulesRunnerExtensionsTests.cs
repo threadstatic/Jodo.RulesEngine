@@ -27,7 +27,7 @@ namespace Jodo.Tests
         public void TestRules_OneRuleRegisteredAndThatRuleFails_ExceptionThrown()
         {
             RulesInitializer.RegisterRule<IAccountBalanceRules, decimal>(typeof(Account), () => new RuleThatWillAlwaysFail());
-            Assert.Catch(typeof(InvalidOperationException), () => RulesRunner.TestRules<IAccountBalanceRules, decimal>(RulesProvider, typeof(Account), 99));
+            Assert.Catch(typeof(BusinessRuleViolatedException), () => RulesRunner.TestRules<IAccountBalanceRules, decimal>(RulesProvider, typeof(Account), 99));
         }
 
         [Test]
@@ -35,7 +35,7 @@ namespace Jodo.Tests
         {
             RulesInitializer.RegisterRule<IAccountBalanceRules, decimal>(typeof(Account), () => new RuleThatWillAlwaysFail());
             RulesInitializer.RegisterRule<IAccountBalanceRules, decimal>(typeof(Account), () => new RuleThatWillAlwaysPass());
-            Assert.Catch(typeof(InvalidOperationException), () => RulesRunner.TestRules<IAccountBalanceRules, decimal>(RulesProvider, typeof(Account), 99));
+            Assert.Catch(typeof(BusinessRuleViolatedException), () => RulesRunner.TestRules<IAccountBalanceRules, decimal>(RulesProvider, typeof(Account), 99));
         }
 
         [Test]
@@ -50,7 +50,7 @@ namespace Jodo.Tests
         public void TestRulesWithDecisionData_OneRuleRegisteredAndThatRuleFails_ExceptionThrown()
         {
             RulesInitializer.RegisterRule<IRuleContextWithDecimalDecisionData, decimal>(typeof(Account), () => new RuleWithDecisionDataThatWillAlwaysFail());
-            Assert.Catch(typeof(InvalidOperationException), () => RulesRunner.TestRules<IRuleContextWithDecimalDecisionData, decimal, decimal>(RulesProvider, typeof(Account), 99, 1));
+            Assert.Catch(typeof(BusinessRuleViolatedException), () => RulesRunner.TestRules<IRuleContextWithDecimalDecisionData, decimal, decimal>(RulesProvider, typeof(Account), 99, 1));
         }
 
         [Test]
@@ -58,7 +58,7 @@ namespace Jodo.Tests
         {
             RulesInitializer.RegisterRule<IRuleContextWithDecimalDecisionData, decimal>(typeof(Account), () => new RuleWithDecisionDataThatWillAlwaysPass());
             RulesInitializer.RegisterRule<IRuleContextWithDecimalDecisionData, decimal>(typeof(Account), () => new RuleWithDecisionDataThatWillAlwaysFail());
-            Assert.Catch(typeof(InvalidOperationException), () => RulesRunner.TestRules<IRuleContextWithDecimalDecisionData, decimal, decimal>(RulesProvider, typeof(Account), 99, 1));
+            Assert.Catch(typeof(BusinessRuleViolatedException), () => RulesRunner.TestRules<IRuleContextWithDecimalDecisionData, decimal, decimal>(RulesProvider, typeof(Account), 99, 1));
         }
 
         [Test]
