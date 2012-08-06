@@ -1,5 +1,4 @@
 ﻿using System;
-using Jodo.Tests;
 using NUnit.Framework;
 
 namespace Jodo.Testing
@@ -15,6 +14,12 @@ namespace Jodo.Testing
             rulesEngine = new RulesEngine();
             var rule = new MeetsTheMinimumRequiredAccountBalance(100);
             RulesInitializer.RegisterRule<IAccountBalanceRules, decimal>(typeof(Account), () => rule);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            rulesEngine.Dispose();
         }
 
         [Test]

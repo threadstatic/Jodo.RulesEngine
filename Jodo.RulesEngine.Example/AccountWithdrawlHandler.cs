@@ -33,7 +33,7 @@ namespace Jodo
                     Console.WriteLine("Withdrawl successful");
                     Console.WriteLine(String.Format("Account balance is ${0}", account.Balance));
                 }
-                catch (InvalidOperationException ex)
+                catch (BusinessRuleViolatedException ex)
                 {
                     withDrawlFailed = true;
                     Console.WriteLine(String.Format("Make deposit of ${0}", command.Amount));

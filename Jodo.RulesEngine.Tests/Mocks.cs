@@ -1,7 +1,7 @@
 using System;
 using Jodo.Rules;
 
-namespace Jodo.Tests
+namespace Jodo
 {
     public interface IAccount { }
 
